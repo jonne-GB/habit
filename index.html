@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- PWA / iOS -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Habits">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Build streaks. Track daily habits.">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+
+  <title>Habits</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <div id="view-container">
+    <div id="view-today"   class="view active"></div>
+    <div id="view-habits"  class="view"></div>
+    <div id="view-stats"   class="view"></div>
+    <div id="view-settings" class="view"></div>
+  </div>
+
+  <nav id="tab-bar">
+    <button class="tab-btn active" data-tab="today">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+      </svg>
+      <span>Vandaag</span>
+    </button>
+    <button class="tab-btn" data-tab="habits">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </svg>
+      <span>Gewoontes</span>
+    </button>
+    <button class="tab-btn" data-tab="stats">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 20V10M12 20V4M6 20v-6"/>
+      </svg>
+      <span>Statistieken</span>
+    </button>
+    <button class="tab-btn" data-tab="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+      <span>Instellingen</span>
+    </button>
+  </nav>
+
+  <div id="sheet-backdrop"></div>
+  <div id="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <button class="sheet-btn danger" id="sheet-cancel">Annuleer</button>
+      <span class="sheet-title" id="sheet-title"></span>
+      <button class="sheet-btn" id="sheet-save">Opslaan</button>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+
+  <div id="install-banner">
+    <div class="banner-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2v12M8 6l4-4 4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 13v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="banner-text">
+      Tik op <strong>Deel</strong>
+      <svg style="display:inline;vertical-align:middle;margin:0 3px" width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2v12M8 6l4-4 4 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 13v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      dan <strong>Zet op beginscherm</strong>
+    </div>
+    <div class="banner-close" id="banner-close" data-action="dismiss-banner">✕</div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

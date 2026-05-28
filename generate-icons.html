@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title>
+<style>
+  body { background: #111; color: #fff; font-family: system-ui; padding: 20px; }
+  canvas { margin: 10px; border-radius: 22%; cursor: pointer; }
+  p { font-size: 13px; opacity: 0.6; }
+  .grid { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; }
+  button { margin-top: 20px; padding: 12px 24px; background: #0A84FF; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+<h2>Habit Tracker — Icon Generator</h2>
+<p>Click "Download All" to save all icons, or right-click any canvas → Save Image As.</p>
+<div class="grid" id="grid"></div>
+<button onclick="downloadAll()">Download All Icons</button>
+<script>
+const sizes = [
+  { size: 512, name: 'icon-512.png' },
+  { size: 192, name: 'icon-192.png' },
+  { size: 180, name: 'icon-180.png' },
+  { size: 167, name: 'icon-167.png' },
+  { size: 152, name: 'icon-152.png' },
+  { size: 120, name: 'icon-120.png' }
+];
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function drawIcon(canvas) {
+  const s = canvas.width;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, s, s);
+
+  // Background
+  const r = s * 0.2237;
+  roundRect(ctx, 0, 0, s, s, r);
+  ctx.fillStyle = '#1C1C1E';
+  ctx.fill();
+
+  // Outer glow ring
+  const cx = s * 0.5, cy = s * 0.5;
+  const ringR = s * 0.36;
+  const glow = ctx.createRadialGradient(cx, cy, ringR * 0.6, cx, cy, ringR * 1.1);
+  glow.addColorStop(0, 'rgba(94,92,230,0.3)');
+  glow.addColorStop(1, 'rgba(10,132,255,0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringR * 1.15, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Main circle gradient
+  const grad = ctx.createRadialGradient(cx - s*0.08, cy - s*0.08, 0, cx, cy, s * 0.34);
+  grad.addColorStop(0, '#7C6FF7');
+  grad.addColorStop(0.5, '#5E5CE6');
+  grad.addColorStop(1, '#0A84FF');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, s * 0.33, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Inner highlight
+  const hl = ctx.createRadialGradient(cx - s*0.1, cy - s*0.12, 0, cx, cy, s*0.33);
+  hl.addColorStop(0, 'rgba(255,255,255,0.25)');
+  hl.addColorStop(0.5, 'rgba(255,255,255,0)');
+  ctx.fillStyle = hl;
+  ctx.beginPath();
+  ctx.arc(cx, cy, s * 0.33, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Checkmark
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.lineWidth = s * 0.075;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.shadowColor = 'rgba(255,255,255,0.4)';
+  ctx.shadowBlur = s * 0.03;
+  ctx.beginPath();
+  ctx.moveTo(cx - s*0.115, cy + s*0.01);
+  ctx.lineTo(cx - s*0.01, cy + s*0.12);
+  ctx.lineTo(cx + s*0.155, cy - s*0.1);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+}
+
+const grid = document.getElementById('grid');
+sizes.forEach(({ size, name }) => {
+  const item = document.createElement('div');
+  item.className = 'item';
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  canvas.style.width = canvas.style.height = Math.min(size, 120) + 'px';
+  canvas.title = name;
+  drawIcon(canvas);
+  item.appendChild(canvas);
+  item.appendChild(document.createTextNode(name));
+  grid.appendChild(item);
+});
+
+function downloadAll() {
+  document.querySelectorAll('canvas').forEach((canvas, i) => {
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.download = sizes[i].name;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    }, i * 200);
+  });
+}
+</script>
+</body>
+</html>
